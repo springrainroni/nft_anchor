@@ -1,0 +1,14 @@
+[features]
+seeds = false
+[programs.devnet]
+nft_minting = "4C4Hba3ZWhuWFswww5GXnfhdEHsvr1LHtvbPM5ypGNrz"
+
+[registry]
+url = "https://anchor.projectserum.com"
+
+[provider]
+cluster = "devnet"
+wallet = "/home/roni/.config/solana/id.json"
+
+[scripts]
+test = "yarn run ts-mocha -p ./tsconfig.json -t 1000000 tests/**/*.ts"
