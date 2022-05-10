@@ -24,7 +24,7 @@ describe("nft_minting", () => {
     const program = anchor.workspace
     .NftMinting as Program<NftMinting>;
     const TOKEN_METADATA_PROGRAM_ID = new anchor.web3.PublicKey(
-          "4C4Hba3ZWhuWFswww5GXnfhdEHsvr1LHtvbPM5ypGNrz"
+          "metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s"
         );
         const lamports: number =
           await program.provider.connection.getMinimumBalanceForRentExemption(
