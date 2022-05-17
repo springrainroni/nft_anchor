@@ -53,7 +53,7 @@ pub mod nft_minting {
             },
         ];
         let collection = mpl_token_metadata::state::Collection {
-                verified: false,
+                verified: true,
                 key: ctx.accounts.collection.key()
             };
         
