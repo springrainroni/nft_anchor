@@ -140,6 +140,5 @@ pub struct MintNFT<'info> {
     pub master_edition: UncheckedAccount<'info>,
     
     /// CHECK: This is not dangerous because we don't read or write from this account
-    #[account(mut)]
     pub collection: UncheckedAccount<'info>,
 }
