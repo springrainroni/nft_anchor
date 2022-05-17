@@ -123,8 +123,7 @@ describe("nft_minting", () => {
               payer: program.provider.wallet.publicKey,
               systemProgram: SystemProgram.programId,
               rent: anchor.web3.SYSVAR_RENT_PUBKEY,
-              masterEdition: masterEdition,
-              collection: new anchor.web3.PublicKey("DSVJNJvJM5EbMt4mhJ2Kzj19YhnNXtxpas35JzUWP8Kn")
+              masterEdition: masterEdition
             },
           }
         );

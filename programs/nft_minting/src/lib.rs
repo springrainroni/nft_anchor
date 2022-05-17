@@ -2,7 +2,7 @@ use anchor_lang::prelude::*;
 use anchor_lang::solana_program::program::invoke;
 use anchor_spl::token;
 use anchor_spl::token::{MintTo, Token};
-use mpl_token_metadata::instruction::{create_master_edition_v3, create_metadata_accounts_v2};
+use mpl_token_metadata::instruction::{create_master_edition_v3, create_metadata_accounts_v2,set_and_verify_collection};
 
 declare_id!("AwobnPuwpLoGnwvhgBt22mTV1LxRDKKS5Usymrii1T4M");
 
@@ -52,10 +52,10 @@ pub mod nft_minting {
                 share: 0,
             },
         ];
-        let collection = mpl_token_metadata::state::Collection {
-                verified: true,
-                key: ctx.accounts.collection.key()
-            };
+        // let collection = mpl_token_metadata::state::Collection {
+        //         verified: true,
+        //         key: ctx.accounts.collection.key()
+        //     };
         
         msg!("Creator Assigned");
         let symbol = std::string::ToString::to_string("symb");
@@ -74,12 +74,13 @@ pub mod nft_minting {
                 1,
                 true,
                 false,
-                Some(collection),
+                None,
                 None
              ),
             account_info.as_slice(),
          )?;
         msg!("Metadata Account Created !!!");
+
         let master_edition_infos = vec![
             ctx.accounts.master_edition.to_account_info(),
             ctx.accounts.mint.to_account_info(),
@@ -106,7 +107,31 @@ pub mod nft_minting {
             master_edition_infos.as_slice(),
         )?;
         msg!("Master Edition Nft Minted !!!");
-
+        let set_and_verify_collection_info = vec![
+            ctx.accounts.master_edition.to_account_info(),
+            ctx.accounts.mint.to_account_info(),
+            ctx.accounts.mint_authority.to_account_info(),
+            ctx.accounts.payer.to_account_info(),
+            ctx.accounts.metadata.to_account_info(),
+            ctx.accounts.token_metadata_program.to_account_info(),
+            ctx.accounts.token_program.to_account_info(),
+            ctx.accounts.system_program.to_account_info(),
+            ctx.accounts.rent.to_account_info(),
+        ];
+        invoke(
+            &set_and_verify_collection(
+                ctx.accounts.token_metadata_program.key(),
+                ctx.accounts.metadata.key(),
+                ctx.accounts.mint_authority.key(),
+                ctx.accounts.payer.key(),
+                ctx.accounts.payer.key(),
+                ctx.accounts.mint.key(),
+                ctx.accounts.token_metadata_program.key(),
+                ctx.accounts.master_edition.key(),
+                Some(ctx.accounts.mint_authority.key()),
+            ),
+            set_and_verify_collection_info.as_slice()
+        )?;
         Ok(())
     }
 }
@@ -139,6 +164,4 @@ pub struct MintNFT<'info> {
     #[account(mut)]
     pub master_edition: UncheckedAccount<'info>,
     
-    /// CHECK: This is not dangerous because we don't read or write from this account
-    pub collection: UncheckedAccount<'info>,
 }
