@@ -124,6 +124,7 @@ describe("nft_minting", () => {
               systemProgram: SystemProgram.programId,
               rent: anchor.web3.SYSVAR_RENT_PUBKEY,
               masterEdition: masterEdition,
+              collection: anchor.web3.Keypair.generate().publicKey
             },
           }
         );

@@ -4,7 +4,7 @@ use anchor_spl::token;
 use anchor_spl::token::{MintTo, Token};
 use mpl_token_metadata::instruction::{create_master_edition_v3, create_metadata_accounts_v2};
 
-declare_id!("4C4Hba3ZWhuWFswww5GXnfhdEHsvr1LHtvbPM5ypGNrz");
+declare_id!("AwobnPuwpLoGnwvhgBt22mTV1LxRDKKS5Usymrii1T4M");
 
 #[program]
 pub mod nft_minting {
@@ -52,6 +52,11 @@ pub mod nft_minting {
                 share: 0,
             },
         ];
+        let collection = mpl_token_metadata::state::Collection {
+                verified: false,
+                key: ctx.accounts.collection.key()
+            };
+        
         msg!("Creator Assigned");
         let symbol = std::string::ToString::to_string("symb");
         invoke(
@@ -69,7 +74,7 @@ pub mod nft_minting {
                 1,
                 true,
                 false,
-                None,
+                Some(collection),
                 None
              ),
             account_info.as_slice(),
@@ -134,4 +139,7 @@ pub struct MintNFT<'info> {
     #[account(mut)]
     pub master_edition: UncheckedAccount<'info>,
     
+    /// CHECK: This is not dangerous because we don't read or write from this account
+    #[account(mut)]
+    pub collection: UncheckedAccount<'info>,
 }
